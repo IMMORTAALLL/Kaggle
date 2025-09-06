@@ -80,28 +80,32 @@ def make_submit(model, dataloader, file_name):
     df.to_csv(os.path.join("kaggle/digit-recognizer/src/predict", file_name), index=False)
 
 
-for epoch in range(epochs):
-    batch_loss = 0
-    for idx, (x, y) in enumerate(train_dataloader_max):
-        model.train()
-        optimizer.zero_grad()
-        x, y = x.to("cuda"), y.to("cuda")
-        outputs = model(x)
-        loss = loss_fn(outputs, y)
-        batch_loss += loss.item()
-        loss.backward()
-        optimizer.step()
-    losses.append(batch_loss / len(train_dataloader_max))
-    train_acc.append(evaluate_model(model, train_dataloader_max))
-    valid_acc.append(evaluate_model(model, valid_dataloader))
-    print(f"第{epoch+1}训练:\nloss:{losses[-1]}\ntrain_acc:{train_acc[-1]}\nvalid_acc:{valid_acc[-1]}\n")
 
-plt.figure()
-plt.plot(range(1, epochs + 1), losses, label="train_loss")
-plt.plot(range(1, epochs + 1), train_acc, label="train_acc")
-plt.plot(range(1, epochs + 1), valid_acc, label="valid_acc")
-plt.legend(loc="upper right")
-plt.show()
 
-make_submit(model, test_dataloader, "LeNet_MR_PRO_MAX_submit.csv")
-torch.save(model, r"kaggle/digit-recognizer/outputs/models/LeNet_MR_PRO_MAX.pth")
+if __name__ == "__main__":
+
+    for epoch in range(epochs):
+        batch_loss = 0
+        for idx, (x, y) in enumerate(train_dataloader_max):
+            model.train()
+            optimizer.zero_grad()
+            x, y = x.to("cuda"), y.to("cuda")
+            outputs = model(x)
+            loss = loss_fn(outputs, y)
+            batch_loss += loss.item()
+            loss.backward()
+            optimizer.step()
+        losses.append(batch_loss / len(train_dataloader_max))
+        train_acc.append(evaluate_model(model, train_dataloader_max))
+        valid_acc.append(evaluate_model(model, valid_dataloader))
+        print(f"第{epoch+1}训练:\nloss:{losses[-1]}\ntrain_acc:{train_acc[-1]}\nvalid_acc:{valid_acc[-1]}\n")
+
+    plt.figure()
+    plt.plot(range(1, epochs + 1), losses, label="train_loss")
+    plt.plot(range(1, epochs + 1), train_acc, label="train_acc")
+    plt.plot(range(1, epochs + 1), valid_acc, label="valid_acc")
+    plt.legend(loc="upper right")
+    plt.show()
+
+    make_submit(model, test_dataloader, "LeNet_MR_PRO_MAX_submit.csv")
+    torch.save(model, r"kaggle/digit-recognizer/outputs/models/LeNet_MR_PRO_MAX.pth")
