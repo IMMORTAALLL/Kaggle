@@ -39,3 +39,9 @@
 ![](assets/LeNet_MR.png)  
 
 ![](assets/Score.png)
+
+最后加入了一层暂退层和两层批量正则化层，使正确率接近理论最高。
+
+![](assets/LeNet_MR_PRO.png)  
+
+![](assets/Score1.png)
