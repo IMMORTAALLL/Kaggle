@@ -25,14 +25,34 @@ class LeNet(nn.Module):
     def forward(self, x):
         return self.net(x)
     
-model = LeNet().to("cuda")
-epochs = 30
-lr = 0.9
+class LeNet_MR(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.net = nn.Sequential(
+            nn.Conv2d(1,6,kernel_size=5,padding=2),nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2,stride=2),
+            nn.Conv2d(6,16,kernel_size=5),nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2,stride=2),
+            nn.Flatten(),
+            nn.Linear(16*5*5, 120),nn.ReLU(),
+            nn.Linear(120,84),nn.ReLU(),
+            nn.Linear(84, 10)
+        )
+    def forward(self, x):
+        return self.net(x)
+    
+#model = LeNet().to("cuda")
+model = LeNet_MR().to("cuda")
+#epochs = 50
+epochs = 20
+#lr = 0.9
+lr = 0.01
 loss_fn = nn.CrossEntropyLoss()
 losses = []
 train_acc = []
 valid_acc = []
-optimizer = torch.optim.SGD(model.parameters(), lr=lr)
+#optimizer = torch.optim.SGD(model.parameters(), lr=lr)
+optimizer = torch.optim.Adam(model.parameters(), lr=lr)
 
 def evaluate_model(model, dataloader):
     model.eval()
@@ -84,5 +104,5 @@ plt.plot(range(1, epochs + 1), valid_acc, label="valid_acc")
 plt.legend(loc="upper right")
 plt.show()
 
-make_submit(model, test_dataloader, "LeNet_submit.csv")
-torch.save(model, r"kaggle/digit-recognizer/outputs/models/LeNet.pth")
+make_submit(model, test_dataloader, "LeNet_MR_submit.csv")
+torch.save(model, r"kaggle/digit-recognizer/outputs/models/LeNet_MR.pth")
