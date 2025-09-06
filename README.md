@@ -27,3 +27,5 @@
 ### LeNet  
 
 直接复用了LeNet结构，发现拟合的很好。  
+
+![](assets/LeNet.png)
