@@ -26,6 +26,16 @@
 
 ### LeNet  
 
-直接复用了LeNet结构，发现拟合的很好。  
+直接复用了LeNet结构，发现拟合的很好，得分0.97。  
 
 ![](assets/LeNet.png)
+
+但是由于早期的LeNet使用的是平均池化和Sigmoid激活函数导致其收敛速度比较慢而且噪声可能更多。  
+
+### LeNet_MR  
+
+把AvgPool换成了MaxPool，并且激活函数使用ReLU。一开始学习率没有调整导致无法收敛，后面降低了学习率，并且选用了有动量和自适应学习率的Adam优化算法，确实收敛非常快，得分也略有提升。  
+
+![](assets/LeNet_MR.png)  
+
+![](assets/Score.png)
