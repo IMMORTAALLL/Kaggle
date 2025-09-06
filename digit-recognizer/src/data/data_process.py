@@ -49,16 +49,19 @@ class MNISTTestDataset(Dataset):
         return self.transform(feature)
 
 transform = transforms.Compose([
-    transforms.Normalize(mean=train_features.mean(),std=train_features.std())
+    transforms.Normalize(mean=0.1307,std=0.3081)
+    #transforms.Resize((32, 32))
 ])
 
 
 
 train_dataset = MNISTDataset(train_features, train_labels, transform)
+train_dataset_max = MNISTDataset(torch.cat((train_features, valid_features),dim=0), torch.cat((train_labels,valid_labels),dim=0), transform)
 valid_dataset = MNISTDataset(valid_features, valid_labels, transform)
 test_dataset = MNISTTestDataset(test_features, transform)
 
 train_dataloader = DataLoader(train_dataset, shuffle=True, batch_size = 256)
+train_dataloader_max = DataLoader(train_dataset_max, shuffle=True, batch_size = 256)
 valid_dataloader = DataLoader(valid_dataset, shuffle=False, batch_size = 128)
 test_dataloader = DataLoader(test_dataset, shuffle=False, batch_size = 256)
 
