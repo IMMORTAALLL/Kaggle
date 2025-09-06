@@ -10,7 +10,7 @@ test_df = pd.read_csv(r"kaggle/digit-recognizer/data/raw/test.csv")
 all_df = pd.concat([train_df, test_df], ignore_index=True)
 images = torch.tensor(all_df.drop(columns=['label']).values, dtype=torch.float32).reshape(-1, 28, 28)
 features = (images[:((~(pd.isnull(all_df['label']))).sum()), :] / 255.0).unsqueeze(1)
-labels = torch.tensor(train_df['label'].values, dtype=torch.float32)
+labels = torch.tensor(train_df['label'].values, dtype=torch.long)
 test_features = (images[features.shape[0]:,:] / 255.0).unsqueeze(1)
 
 train_features, valid_features, train_labels, valid_labels = train_test_split(
